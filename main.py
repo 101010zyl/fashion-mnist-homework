@@ -65,6 +65,42 @@ class Net2(nn.Module):
         x = F.relu(self.fc3(x))
         x = (self.fc4(x))
         return x
+    
+class Net3(nn.Module):
+    def __init__(self):
+        super(Net3, self).__init__()
+        self.conv1 = torch.nn.Conv2d(1, 64, kernel_size=5, padding=2)
+        self.conv2 = torch.nn.Conv2d(64, 64, kernel_size=5, padding=2)
+        self.conv3 = torch.nn.Conv2d(64, 128, kernel_size=3,padding=1)
+        self.conv4 = torch.nn.Conv2d(128, 128, kernel_size=3,padding=1)
+        self.conv5 = torch.nn.Conv2d(128, 256, kernel_size=3, padding=1)
+        self.conv6 = torch.nn.Conv2d(256, 256, kernel_size=3, padding=1)
+        self.conv7 = torch.nn.Conv2d(256, 256, kernel_size=3, padding=1)
+        self.conv8 = torch.nn.Conv2d(256, 512, kernel_size=3, padding=1)
+        self.conv9 = torch.nn.Conv2d(512, 512, kernel_size=3, padding=1)
+        self.conv10 = torch.nn.Conv2d(512, 1024, kernel_size=3, padding=1)
+        self.fc1 = nn.Linear(1024, 2048)
+        self.fc2 = nn.Linear(2048, 512)
+        self.fc3 = nn.Linear(512, 100)
+        self.fc4 = nn.Linear(100, 10)
+
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        x = F.max_pool2d(F.relu(self.conv2(x)), 2)
+        x = F.relu(self.conv3(x))
+        x = F.max_pool2d(F.relu(self.conv4(x)), 2)
+        x = F.relu(self.conv5(x))
+        x = F.relu(self.conv6(x))
+        x = F.max_pool2d(F.relu(self.conv7(x)), 2, ceil_mode=True)
+        x = F.relu(self.conv8(x))
+        x = F.max_pool2d(F.relu(self.conv9(x)), 2)
+        x = F.max_pool2d(F.relu(self.conv10(x)), 2)
+        x = x.view(batchSize, -1)
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = F.relu(self.fc3(x))
+        x = (self.fc4(x))
+        return x
 
 def train():
     for epoch in range(epochs):
@@ -123,7 +159,7 @@ if __name__ == '__main__':
     testNum = len(testLoader)
 
     # model = Net0(inputSize, hidenSize, classNum)
-    model = Net2()
+    model = Net3()
     criter = nn.CrossEntropyLoss()
     optimiser = torch.optim.Adam(model.parameters(), lr=learningRate)
     model = model.to(device)
