@@ -8,7 +8,7 @@ import numpy as np
 import torch.nn.functional as F
 
 hidenSize = 500
-epochs = 20
+epochs = 50
 batchSize = 200
 learningRate = 0.001
 
